@@ -1,4 +1,4 @@
-// 
+//
 //       FILE: Cozir.cpp
 //     AUTHOR: Rob Tillaart & Michael Hawthorne
 //    VERSION: 0.1.01
@@ -12,15 +12,14 @@
 //
 
 #include "Cozir.h"
-#include "SoftwareSerial.h"
 
 ////////////////////////////////////////////////////////////
 //
 // CONSTRUCTOR
 //
-COZIR::COZIR(SoftwareSerial& nss) : CZR_Serial(nss)
+COZIR::COZIR(HardwareSerial& nss) : CZR_Serial(nss)
 {
-  CZR_Serial.begin(9600);
+  nss.begin(9600);
 }
 
 ////////////////////////////////////////////////////////////
@@ -28,7 +27,7 @@ COZIR::COZIR(SoftwareSerial& nss) : CZR_Serial(nss)
 // OPERATING MODE
 //
 // note: use CZR_COMMAND to minimize power consumption
-// CZR_POLLING and CZR_STREAMING use an equally amount 
+// CZR_POLLING and CZR_STREAMING use an equally amount
 // of power as both sample continuously...
 //
 void COZIR::SetOperatingMode(uint8_t mode)
@@ -43,7 +42,7 @@ void COZIR::SetOperatingMode(uint8_t mode)
 //
 // POLLING MODE
 //
-// you need to set the polling mode explicitely before 
+// you need to set the polling mode explicitely before
 // using these functions. SetOperatingMode(CZR_POLLING);
 // this is the default behaviour of this Class but
 // not of the sensor!!
@@ -111,7 +110,7 @@ uint16_t COZIR::CalibrateNitrogen()
 uint16_t COZIR::CalibrateKnownGas(uint16_t value)
 {
   sprintf(buffer, "X %u", value);
-  return Request(buffer); 
+  return Request(buffer);
 }
 
 // NOT RECOMMENDED, see datasheet
@@ -119,7 +118,7 @@ uint16_t COZIR::CalibrateManual(uint16_t value)
 {
   return 0;
   //sprintf(buffer, "u %u", value);
-  //return Request(buffer); 
+  //return Request(buffer);
 }
 
 // NOT RECOMMENDED, see datasheet
@@ -182,17 +181,17 @@ void COZIR::GetRecentFields()
 
 ////////////////////////////////////////////////////////////
 //
-// EEPROM - USE WITH CARE 
+// EEPROM - USE WITH CARE
 //
 // SEE DATASHEET 7.2 EEPROM FOR DETAILS
 //
-// TODO 
-// - defines for addresses 
+// TODO
+// - defines for addresses
 // - do HILO values in one call
 //
 void COZIR::SetEEPROM(uint8_t address, uint8_t value)
 {
-  sprintf(buffer, "P %u %u", address, value); 
+  sprintf(buffer, "P %u %u", address, value);
   Command(buffer);
 }
 
@@ -222,7 +221,7 @@ void COZIR::GetConfiguration()
 
 /////////////////////////////////////////////////////////
 // PRIVATE
-  
+
 void COZIR::Command(char* s)
 {
   CZR_Serial.print(s);
@@ -236,11 +235,11 @@ uint16_t COZIR::Request(char* s)
   buffer[0] = '\0';
   // read answer; there may be a 100ms delay!
   // TODO: PROPER TIMEOUT CODE.
-  delay(250);  
+  delay(250);
   int idx = 0;
   while(CZR_Serial.available())
   {
-	buffer[idx++] = CZR_Serial.read();
+  buffer[idx++] = CZR_Serial.read();
   }
   buffer[idx] = '\0';
   uint16_t rv = 0;

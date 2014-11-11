@@ -1,4 +1,4 @@
-// 
+//
 //       FILE: Cozir.h
 //     AUTHOR: Rob Tillaart & Michael Hawthorne
 //    VERSION: 0.1.01
@@ -14,8 +14,6 @@
 #ifndef Cozir_h
 #define Cozir_h
 
-#include "SoftwareSerial.h"
-
 #if defined(ARDUINO) && ARDUINO >= 100
   #include "Arduino.h"
 #else
@@ -24,7 +22,7 @@
 
 #define COZIR_LIB_VERSION 0.1.01
 
-// OUTPUTFIELDS 
+// OUTPUTFIELDS
 // See datasheet for details.
 // These defines can be OR-ed for the SetOutputFields command
 #define CZR_LIGHT 			0x2000
@@ -45,7 +43,7 @@
 // easy default setting for streaming
 #define CZR_HTC			(CZR_HUMIDITY | CZR_RAWTEMP | CZR_RAWCO2)
 // not in datasheet for debug only
-#define CZR_ALL				0x3FFF  
+#define CZR_ALL				0x3FFF
 
 // OPERATING MODES
 #define CZR_COMMAND			0x00
@@ -55,41 +53,41 @@
 class COZIR
 {
   public:
-	COZIR(SoftwareSerial&);// : CZR_Serial(nss)
-	
-	void SetOperatingMode(uint8_t mode);
-		
-	float Celsius();
-	float Fahrenheit();
-	float Humidity();
-	float Light();
-	uint16_t CO2();
+  COZIR(HardwareSerial&);// : CZR_Serial(nss)
 
-	uint16_t FineTuneZeroPoint(uint16_t , uint16_t);
-	uint16_t CalibrateFreshAir();
-	uint16_t CalibrateNitrogen();
-	uint16_t CalibrateKnownGas(uint16_t );
-	uint16_t CalibrateManual(uint16_t );
-	uint16_t SetSpanCalibrate(uint16_t );
-	uint16_t GetSpanCalibrate();
-		
-	void SetDigiFilter(uint8_t );
-	uint8_t GetDigiFilter();
-	
-	void SetOutputFields(uint16_t );
-	void GetRecentFields();
-	
-	void SetEEPROM(uint8_t , uint8_t );
-	uint8_t GetEEPROM(uint8_t );
-	
-	void GetVersionSerial();
-	void GetConfiguration();
-  
+  void SetOperatingMode(uint8_t mode);
+
+  float Celsius();
+  float Fahrenheit();
+  float Humidity();
+  float Light();
+  uint16_t CO2();
+
+  uint16_t FineTuneZeroPoint(uint16_t , uint16_t);
+  uint16_t CalibrateFreshAir();
+  uint16_t CalibrateNitrogen();
+  uint16_t CalibrateKnownGas(uint16_t );
+  uint16_t CalibrateManual(uint16_t );
+  uint16_t SetSpanCalibrate(uint16_t );
+  uint16_t GetSpanCalibrate();
+
+  void SetDigiFilter(uint8_t );
+  uint8_t GetDigiFilter();
+
+  void SetOutputFields(uint16_t );
+  void GetRecentFields();
+
+  void SetEEPROM(uint8_t , uint8_t );
+  uint8_t GetEEPROM(uint8_t );
+
+  void GetVersionSerial();
+  void GetConfiguration();
+
   private:
-    SoftwareSerial& CZR_Serial;
+    HardwareSerial& CZR_Serial;
     char buffer[20];
-	void Command(char* );
-	uint16_t Request(char* );
+  void Command(char* );
+  uint16_t Request(char* );
 };
 
 #endif
